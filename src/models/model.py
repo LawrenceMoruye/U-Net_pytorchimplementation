@@ -1,5 +1,6 @@
 import torch 
 import torch.nn as nn 
+import math
 
 
 def double_convolution(in_channels,out_channels):
@@ -20,11 +21,20 @@ def crop_image_tensor(original_tensor,target_tensor):
     """
     original_tensor_size = original_tensor.size()[-1]
     target_tensor_size = target_tensor.size()[-1]
+    #change = math.ceil((original_tensor_size - target_tensor_size)/2)
     change = original_tensor_size - target_tensor_size
-    change = change // 2
-    # print(original_tensor_size)
-    # print(change)
-    return original_tensor[:,:,change:original_tensor_size - change,change:original_tensor_size - change]
+    left=change//2
+    right=change-left
+    #print("x {} y {} change {}".format(original_tensor_size, target_tensor_size, change))
+    # change =change//2
+    # x = original_tensor.size()[-1]
+    # y = target_tensor.size()[-1]
+    # change = max(math.floor((x-y)/2), ((x-y)//2))
+    
+    new = original_tensor[:,:,left:original_tensor_size - right ,left:original_tensor_size - right]
+    
+    return new
+    
 
 
 
@@ -34,7 +44,7 @@ class UNet(nn.Module):
         super(UNet, self).__init__()
         self.max_pool_2_x_2 = nn.MaxPool2d(stride=2,kernel_size=2)
 
-        self.down_conv_block_1 = double_convolution(1,64)
+        self.down_conv_block_1 = double_convolution(3,64)
         self.down_conv_block_2 = double_convolution(64,128)
         self.down_conv_block_3 = double_convolution(128,256)
         self.down_conv_block_4 = double_convolution(256,512)
@@ -75,10 +85,14 @@ class UNet(nn.Module):
 
         x = self.up_transpose_1(x9)
         y = crop_image_tensor(x7,x)
+        print(x.size())
+        print(y.size())
         x = self.up_conv_block_1(torch.cat([x,y],axis=1))
 
         x = self.up_transpose_2(x)
         y = crop_image_tensor(x5,x)
+        print(x.size())
+        print(y.size())
         x = self.up_conv_block_2(torch.cat([x,y],axis=1))
 
         x = self.up_transpose_3(x)
@@ -96,11 +110,8 @@ class UNet(nn.Module):
         # print(output.size())
         return output
 
-        
-
-
 if __name__== "__main__":
-    image =torch.rand((1,1,572,572))
+    image =torch.rand((1,3,572,572))
     model = UNet()
-    model(image)
+    print(model(image).size())
 
