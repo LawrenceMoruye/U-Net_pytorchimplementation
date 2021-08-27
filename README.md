@@ -1,7 +1,19 @@
 UNet_Paper
 ==============================
 
-Convolutional Networks for Biomedical Image Segmentation
+Convolutional Networks for Biomedical Image Segmentation.
+<div align="center">
+<p>Paper Name:</>
+    <a href="https://arxiv.org/abs/1505.04597">Convolutional Networks for Biomedical Image Segmentation</a>
+</div>  
+<div align="center">
+<p>Implementation Notebook</p>
+    <a href="https://github.com/LawrenceMoruye/U-Net_pytorchimplementation/blob/main/notebooks/1-0-lawrence-moruye-u-net.ipynb">Notebook</a>
+</div>
+<div align="center">
+    <p>Presentation Deck:</p>
+    <a href="https://github.com/LawrenceMoruye/U-Net_pytorchimplementation/blob/main/reports/U-NET-presentation_deck.pdf">Presentation</a>
+</div>
 
 Project Organization
 ------------
